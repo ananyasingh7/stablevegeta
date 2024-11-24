@@ -1,30 +1,27 @@
-# Base on Node 21
-FROM node:21-alpine
+# Use Node.js base image
+FROM node:18-alpine
 
 # Set working directory
 WORKDIR /app
 
 # Copy package files
-COPY package*.json ./
+COPY package.json package-lock.json ./
 
-# Install dependencies
-RUN npm install
+# Install production dependencies
+RUN npm install --production
 
-# Copy all files
+# Copy the rest of the application files
 COPY . .
+
+# Build the application
+RUN npm run build
 
 # Set environment variables
 ENV PORT=8080
-ENV NODE_ENV=production
+ENV HOSTNAME=0.0.0.0
 
-# Build the Next.js application
-RUN npm run build
-
-# Expose port 8080
+# Expose the port
 EXPOSE 8080
 
-# Add logging to help debug startup issues
-CMD echo "Starting Next.js application..." && \
-    echo "PORT=$PORT" && \
-    echo "NODE_ENV=$NODE_ENV" && \
-    npm start
+# Start the application
+CMD ["npm", "run", "start"]
