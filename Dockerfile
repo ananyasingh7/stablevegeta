@@ -7,8 +7,10 @@ RUN npm install
 
 COPY . .
 
+ENV PORT=8080
+
 RUN npm run build
 
-EXPOSE 3000
+EXPOSE 8080
 
 CMD ["npm", "start"]
