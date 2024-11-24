@@ -10,18 +10,17 @@ COPY package.json package-lock.json ./
 # Install production dependencies
 RUN npm install --production
 
-# Copy the rest of the application files
+# Copy all application files
 COPY . .
 
 # Build the application
 RUN npm run build
 
-# Set environment variables
-ENV PORT=8080
-ENV HOSTNAME=0.0.0.0
+# Change working directory to standalone output
+WORKDIR /app/.next/standalone
 
-# Expose the port
+# Expose the correct port
 EXPOSE 8080
 
-# Start the application
-CMD ["npm", "run", "start"]
+# Start the standalone application
+CMD ["node", "server.js", "--port", "$PORT"]
