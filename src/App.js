@@ -1,15 +1,19 @@
-import { FaTwitter, FaLinkedin, FaGithub } from 'react-icons/fa';
+import React from "react";
+import { BrowserRouter as Router, Route, Routes } from "react-router-dom";
+import MainPage from "./MainPage"; // Your main page content
+import Objective2025 from "./Objective2025"; // The Objective 2025 content
 
 function App() {
   return (
-    <div className="min-h-screen flex flex-col items-center justify-center bg-black">
-      <h1 className="text-white text-4xl mb-6">Coming Soon</h1>
-      <div className="flex space-x-4 text-white text-2xl">
-        <a href="https://x.com/TheStableVegeta" target="_blank" rel="noopener noreferrer" className="hover:text-gray-300 transition">
-          <FaTwitter />
-        </a>
-      </div>
-    </div>
+    <Router>
+      <Routes>
+        {/* Route for the main page */}
+        <Route path="/" element={<MainPage />} />
+        
+        {/* Route for Objective 2025 */}
+        <Route path="/objective2025" element={<Objective2025 />} />
+      </Routes>
+    </Router>
   );
 }
 
