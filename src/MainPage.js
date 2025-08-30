@@ -16,12 +16,6 @@ function MainPage() {
           <FaTwitter />
         </a>
       </div>
-      <Link
-        to="/objective2025"
-        className="text-blue-500 underline text-lg hover:text-blue-300"
-      >
-        Objective 2025
-      </Link>
     </div>
   );
 }
