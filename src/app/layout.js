@@ -1,19 +1,15 @@
 import './globals.css'
-import Navigation from '../components/Navigation'
 
 export const metadata = {
   title: 'stablevegeta',
-  description: 'Personal space for projects, research, blogs, and ideas',
+  description: 'Developer, researcher, and builder',
 }
 
 export default function RootLayout({ children }) {
   return (
     <html lang="en" className="dark">
-      <body className="bg-black text-zinc-100 antialiased">
-        <Navigation />
-        <main className="min-h-screen">
-          {children}
-        </main>
+      <body className="bg-black text-white antialiased">
+        {children}
       </body>
     </html>
   )
