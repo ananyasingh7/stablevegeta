@@ -1,17 +1,15 @@
-import React, { useEffect } from "react";
-import "./Privacy.css";
+export const metadata = {
+  title: 'Privacy Policy - stablevegeta',
+  description: 'Privacy policy for HalaAI Bio-Monitor',
+}
 
-function Privacy() {
-  useEffect(() => {
-    window.scrollTo(0, 0);
-  }, []);
-
+export default function PrivacyPage() {
   return (
-    <div className="privacy-shell">
-      <main className="privacy-page">
+    <div className="max-w-3xl mx-auto px-4 sm:px-6 lg:px-8 py-16">
+      <article className="prose prose-invert prose-zinc max-w-none">
         <h1>Privacy Policy for HalaAI (Bio-Monitor)</h1>
 
-        <div className="privacy-disclaimer">
+        <div className="bg-zinc-900 border border-zinc-800 rounded-lg p-6 my-6">
           <strong>Project Status: Personal Use Only</strong>
           <br />
           This application is a private, personal development project ("Pet Project")
@@ -111,16 +109,16 @@ function Privacy() {
           this project, please contact the developer:
         </p>
         <p>
-          <strong>Email:</strong>{" "}
-          <a href="mailto:stablevegeta@gmail.com">stablevegeta@gmail.com</a>
+          <strong>Email:</strong>{' '}
+          <a href="mailto:stablevegeta@gmail.com" className="text-blue-400 hover:text-blue-300">
+            stablevegeta@gmail.com
+          </a>
         </p>
 
-        <div className="privacy-footer">
+        <div className="bg-zinc-900 border border-zinc-800 rounded-lg p-6 mt-8 text-center">
           &copy; 2026 HalaAI Personal Project. All rights reserved.
         </div>
-      </main>
+      </article>
     </div>
-  );
+  )
 }
-
-export default Privacy;
