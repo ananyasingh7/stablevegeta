@@ -5,7 +5,7 @@ export const metadata = {
   title: 'stablevegeta',
   description: 'Developer, researcher, and builder',
   icons: {
-    icon: '/favicon.ico',
+    icon: '/profile-icon.png',
   },
 }
 

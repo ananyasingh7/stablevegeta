@@ -1,5 +1,10 @@
+'use client'
+
+import { Fragment, useEffect, useRef, useState } from 'react'
 import { FaGithub, FaLinkedin, FaXTwitter } from 'react-icons/fa6'
-import { FiUser, FiGrid, FiFileText, FiBarChart2 } from 'react-icons/fi'
+import { FiHome, FiUser, FiGrid, FiFileText, FiBarChart2, FiChevronUp, FiChevronDown } from 'react-icons/fi'
+import MarketOverview from '../components/MarketOverview'
+import ProjectList from '../components/ProjectList'
 
 const socials = [
   { label: 'GitHub', href: 'https://github.com/ananyasingh7', Icon: FaGithub },
@@ -8,15 +13,16 @@ const socials = [
 ]
 
 const sections = [
-  { label: 'about me', Icon: FiUser },
-  { label: 'my projects', Icon: FiGrid },
-  { label: 'my thoughts', Icon: FiFileText },
-  { label: 'data', Icon: FiBarChart2 },
+  { id: 'home', label: 'home', Icon: FiHome },
+  { id: 'about', label: 'about me', Icon: FiUser },
+  { id: 'projects', label: 'my projects', Icon: FiGrid },
+  { id: 'thoughts', label: 'my thoughts', Icon: FiFileText },
+  { id: 'data', label: 'data', Icon: FiBarChart2 },
 ]
 
 const introduction = [
-  'hello',
   'i keep a workshop for models and markets.',
+  'a workbench for ideas i am still working out.',
   'the work is in projects. the reasoning is in my thoughts.',
   'data is the part that is still moving.',
 ]
@@ -24,25 +30,62 @@ const introduction = [
 function Introduction() {
   let offset = 0
   return (
-    <section className="introduction" aria-label="Introduction">
-      {introduction.map((line, index) => {
+    <>
+      {introduction.map((line) => {
         const start = offset
         offset += line.length + 5
-        const Tag = index === 0 ? 'h1' : 'p'
         return (
-          <Tag key={line}>
+          <p key={line}>
             <span className="sr-only">{line}</span>
             <span aria-hidden="true">{Array.from(line, (character, position) => (
               <span className="typed-character" style={{ animationDelay: `${(start + position) * 35}ms` }} key={position}>{character}</span>
             ))}</span>
-          </Tag>
+          </p>
         )
       })}
-    </section>
+    </>
+  )
+}
+
+function About() {
+  return (
+    <div className="about-content">
+      <p>i&apos;m ananya. i am in new york city.</p>
+      <p>
+        i&apos;ve been a software engineer for six years.<br />
+        i build complex payroll systems and the design of the systems around them.<br />
+        billions of dollars move through that software every day.<br />
+        reliability and consistency is non-negotiable.
+      </p>
+      <p>
+        i also build software on my own time.<br />
+        some of it is for me, and some of it is for the markets i work in.<br />
+        i read and learn as much as i can, and i apply it quickly.
+      </p>
+      <span className="resume-pending"><span>resume</span> · coming soon</span>
+    </div>
   )
 }
 
 export default function Home() {
+  const [activeIndex, setActiveIndex] = useState(0)
+  const dataHeading = useRef(null)
+  const activeSection = sections[activeIndex]
+  const previousSection = sections[activeIndex - 1]
+  const nextSection = sections[activeIndex + 1]
+
+  useEffect(() => {
+    function openLinkedSection() {
+      if (window.location.hash === '#data') {
+        setActiveIndex(sections.findIndex(({ id }) => id === 'data'))
+      }
+    }
+
+    openLinkedSection()
+    window.addEventListener('hashchange', openLinkedSection)
+    return () => window.removeEventListener('hashchange', openLinkedSection)
+  }, [])
+
   return (
     <main className="portfolio-background">
       <header className="site-header">
@@ -53,11 +96,70 @@ export default function Home() {
         </nav>
       </header>
       <nav className="section-nav" aria-label="Portfolio sections">
-        {sections.map(({ label, Icon }) => (
-          <div className={`section-item${label === 'about me' ? ' is-active' : ''}`} key={label}><Icon aria-hidden="true" /><span>{label}</span></div>
+        <button
+          type="button"
+          className="section-arrow"
+          aria-label={previousSection ? `previous section: ${previousSection.label}` : 'previous section'}
+          aria-controls="section-content"
+          aria-disabled={!previousSection}
+          onClick={() => previousSection && setActiveIndex(activeIndex - 1)}
+        >
+          <FiChevronUp aria-hidden="true" />
+        </button>
+        {sections.map(({ id, label, Icon }, index) => (
+          <Fragment key={id}>
+            <button
+              type="button"
+              className="section-item"
+              onClick={() => setActiveIndex(index)}
+              aria-controls="section-content"
+              aria-current={activeIndex === index && id !== 'data' ? 'page' : undefined}
+            >
+              <Icon aria-hidden="true" />
+              <span>{label}</span>
+            </button>
+            {id === 'data' && activeIndex === index && (
+              <button
+                type="button"
+                className="section-item section-item-subsection"
+                aria-current="location"
+                onClick={() => {
+                  dataHeading.current?.focus({ preventScroll: true })
+                  dataHeading.current?.scrollIntoView({ block: 'start' })
+                }}
+              >
+                31 days
+              </button>
+            )}
+          </Fragment>
         ))}
+        <button
+          type="button"
+          className="section-arrow"
+          aria-label={nextSection ? `next section: ${nextSection.label}` : 'next section'}
+          aria-controls="section-content"
+          aria-disabled={!nextSection}
+          onClick={() => nextSection && setActiveIndex(activeIndex + 1)}
+        >
+          <FiChevronDown aria-hidden="true" />
+        </button>
       </nav>
-      <Introduction />
+      <section
+        className={`section-content section-content-${activeSection.id}`}
+        id="section-content"
+        aria-label={activeSection.label}
+      >
+        {activeSection.id === 'home' && <Introduction />}
+        {activeSection.id === 'about' && <About />}
+        {activeSection.id === 'projects' && <ProjectList />}
+        {activeSection.id === 'thoughts' && <p>(soon: The Art of Context Switching)</p>}
+        {activeSection.id === 'data' && (
+          <>
+            <h1 className="data-section-heading" ref={dataHeading} tabIndex={-1}>last 31 days</h1>
+            <MarketOverview />
+          </>
+        )}
+      </section>
     </main>
   )
 }
