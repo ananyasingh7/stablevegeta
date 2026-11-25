@@ -5,7 +5,7 @@ const projects = [
   {
     name: 'llm poker lab',
     summary: 'a research lab built in rust to test how language models play six-handed no-limit texas hold’em and whether they improve with experience.',
-    training: 'we’re fine-tuning a local model, inkling 2 mini, with lora adapters trained on synthetic river decisions. the drills teach hand reading and when to bluff. the median run got both bet sizes right in 5 of 16 new situations, up from 3, but gave up more chips per decision. full-table improvement remains unproven.',
+    training: 'we’re fine-tuning a local model, inkling 2 mini, with lora adapters trained on synthetic river decisions. the drills teach hand reading and when to bluff.',
     repo: 'https://github.com/ananyasingh7/poker',
     trainingReport: '/blob/main/results/16-inkling-session-002/report.md',
     preview: { src: '/projects/poker-table.png', width: 1449, height: 834, alt: 'poker spectator table showing a live hand and session statistics' },
