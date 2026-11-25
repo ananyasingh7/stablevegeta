@@ -9,6 +9,10 @@ export const metadata = {
   },
 }
 
+export const viewport = {
+  themeColor: '#100e13',
+}
+
 export default function RootLayout({ children }) {
   return (
     <html lang="en" className="dark">
