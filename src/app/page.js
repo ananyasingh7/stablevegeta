@@ -71,6 +71,7 @@ export default function Home() {
   const [activeIndex, setActiveIndex] = useState(0)
   const dataHeading = useRef(null)
   const sectionNav = useRef(null)
+  const [sectionNavPinned, setSectionNavPinned] = useState(false)
   const activeSection = sections[activeIndex]
   const previousSection = sections[activeIndex - 1]
   const nextSection = sections[activeIndex + 1]
@@ -85,6 +86,19 @@ export default function Home() {
     openLinkedSection()
     window.addEventListener('hashchange', openLinkedSection)
     return () => window.removeEventListener('hashchange', openLinkedSection)
+  }, [])
+
+  useEffect(() => {
+    // The phone tab bar stays see-through like the desktop menu until it pins to the top
+    // with content scrolling underneath; only then does it get a frosted backdrop.
+    const navElement = sectionNav.current
+    function updateSectionNavPinned() {
+      setSectionNavPinned(navElement.getBoundingClientRect().top < 1)
+    }
+
+    updateSectionNavPinned()
+    window.addEventListener('scroll', updateSectionNavPinned, { passive: true })
+    return () => window.removeEventListener('scroll', updateSectionNavPinned)
   }, [])
 
   useEffect(() => {
@@ -108,7 +122,7 @@ export default function Home() {
           ))}
         </nav>
       </header>
-      <nav className="section-nav" aria-label="Portfolio sections" ref={sectionNav}>
+      <nav className="section-nav" aria-label="Portfolio sections" ref={sectionNav} data-pinned={sectionNavPinned || undefined}>
         <button
           type="button"
           className="section-arrow"

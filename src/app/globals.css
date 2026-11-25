@@ -241,9 +241,13 @@ html:has(.portfolio-background) { background: #100e13; }
     padding: 6px 20px;
     overflow-x: auto;
     scrollbar-width: none;
-    background: rgba(16,14,19,.82);
-    -webkit-backdrop-filter: blur(12px);
-    backdrop-filter: blur(12px);
+    transition: background-color .2s ease, -webkit-backdrop-filter .2s ease, backdrop-filter .2s ease;
+  }
+  /* Transparent like the desktop menu at rest; frosted glass only while content scrolls under it. */
+  .section-nav[data-pinned] {
+    background: rgba(16,14,19,.4);
+    -webkit-backdrop-filter: blur(16px) saturate(140%);
+    backdrop-filter: blur(16px) saturate(140%);
   }
   .section-nav::-webkit-scrollbar { display: none; }
   .section-arrow { display: none; }
@@ -290,6 +294,6 @@ html:has(.portfolio-background) { background: #100e13; }
   }
 }
 @media (prefers-reduced-motion: reduce) {
-  .section-item, .section-arrow, .socials a { transition: none; }
+  .section-item, .section-arrow, .section-nav, .socials a { transition: none; }
   .typed-character { animation: none; }
 }
