@@ -1,0 +1,44 @@
+# ABOUTME: Refreshes src/lib/market-snapshot.json daily at 8 AM EST (13:00 UTC) and commits it to main.
+# ABOUTME: The commit triggers the normal site deploy. Needs the FINNHUB_KEY repo secret for earnings.
+name: Refresh market snapshot
+
+on:
+  schedule:
+    - cron: '0 13 * * *' # 8 AM EST (UTC-5); runs at 9 AM during daylight saving
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+concurrency:
+  group: market-snapshot
+  cancel-in-progress: false
+
+jobs:
+  refresh:
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: main
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+      - name: Unit tests
+        run: node --test scripts/*.test.mjs
+      - name: Build snapshot
+        run: node scripts/market-snapshot.mjs
+        env:
+          FINNHUB_KEY: ${{ secrets.FINNHUB_KEY }}
+      - name: Commit if changed
+        run: |
+          if git diff --quiet -- src/lib/market-snapshot.json; then
+            echo "Snapshot unchanged"
+            exit 0
+          fi
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add src/lib/market-snapshot.json
+          git commit -m "chore(market): refresh snapshot"
+          git push origin HEAD:main
