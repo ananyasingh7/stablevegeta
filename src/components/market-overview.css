@@ -100,7 +100,14 @@
   grid-template-columns: minmax(14ch, 21ch) minmax(0, 1fr);
   gap: 5px;
 }
+/* Below 40 characters a label column plus "(as of yyyy-mm-dd)" no longer fit side by side, so stack them. */
+.market-macro .market-panel-body { container: market-macro / inline-size; }
+@container market-macro (max-width: 40ch) {
+  .market-macro-rows > div { grid-template-columns: minmax(0, 1fr); gap: 0; }
+  .market-macro-rows > div + div { margin-top: 4px; }
+}
 .market-source-mark { color: var(--market-violet); margin-left: 1px; }
+.market-nowrap { white-space: nowrap; }
 
 .market-table {
   width: 100%;
@@ -115,6 +122,13 @@
 .market-quote-table thead th:first-child { white-space: normal; }
 .market-quote-table tbody th { overflow-wrap: anywhere; }
 .market-quote-table thead th:first-child { width: 40%; }
+.market-forex .market-panel-body, .market-futures .market-panel-body { container: market-quotes / inline-size; }
+.market-label-short { display: none; }
+/* Below ~46 characters the full treasury names wrap onto two lines, so switch to the short labels. */
+@container market-quotes (max-width: 46ch) {
+  .market-label-full { display: none; }
+  .market-label-short { display: inline; }
+}
 .market-forex .market-panel-body, .market-futures .market-panel-body { min-height: 156px; }
 
 .market-calendar :is(td, th) { text-align: left; }

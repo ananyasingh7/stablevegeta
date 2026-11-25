@@ -20,10 +20,11 @@ const forex = [
   ['JPY=X', 'USD/JPY', 2],
   ['GBPUSD=X', 'GBP/USD', 4],
   ['BTC-USD', 'BTC/USD', 2],
-  ['^IRX', '13-week Treasury', 3],
-  ['^FVX', '5-year Treasury', 3],
-  ['^TNX', '10-year Treasury', 3],
-  ['^TYX', '30-year Treasury', 3],
+  // The fourth entry is a short label for quote panels too narrow for the full name.
+  ['^IRX', '13-week Treasury', 3, '13W T-Bill'],
+  ['^FVX', '5-year Treasury', 3, '5Y Note'],
+  ['^TNX', '10-year Treasury', 3, '10Y Note'],
+  ['^TYX', '30-year Treasury', 3, '30Y Bond'],
 ]
 
 const futures = [
@@ -143,13 +144,18 @@ function QuoteTable({ title, rows, quotes, className }) {
       <table className="market-table market-quote-table">
         <thead><tr><th scope="col">Instrument</th><th scope="col">Last</th><th scope="col">31d change</th><th scope="col">31d %</th></tr></thead>
         <tbody>
-          {rows.map(([symbol, name, decimals]) => {
+          {rows.map(([symbol, name, decimals, shortName]) => {
             const quote = quotes[symbol]
             const { last, difference, percent } = quoteChange(quote)
             const source = quote && `${quote.source} · ${quote.start} to ${quote.asOf?.slice(0, 10) ?? snapshot.end}`
             return (
               <tr key={symbol} title={source}>
-                <th scope="row">{name}{quote?.source !== 'Yahoo' && quote && <sup className="market-source-mark">*</sup>}</th>
+                <th scope="row">
+                  {shortName ? (
+                    <><span className="market-label-full">{name}</span><span className="market-label-short">{shortName}</span></>
+                  ) : name}
+                  {quote?.source !== 'Yahoo' && quote && <sup className="market-source-mark">*</sup>}
+                </th>
                 <td>{fixed(last, decimals)}</td>
                 <td className={direction(difference)}>{signed(difference, decimals)}</td>
                 <td className={direction(percent)}>{percentage(percent)}</td>
@@ -178,7 +184,7 @@ function MacroPanel({ feeds }) {
         {rows.map(([label, item, decimals, unit, timing = 'as of']) => (
           <div key={label} title={item?.source}>
             <dt>{label}{item?.source && <sup className="market-source-mark">*</sup>}</dt>
-            <dd>{item ? `${fixed(item.value, decimals)}${unit}  (${timing} ${item.date})` : '—'}</dd>
+            <dd>{item ? <>{`${fixed(item.value, decimals)}${unit} `}<span className="market-nowrap">({timing} {item.date})</span></> : '—'}</dd>
           </div>
         ))}
       </dl>
