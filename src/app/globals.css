@@ -267,7 +267,9 @@ html:has(.portfolio-background) { background: #100e13; }
   }
   .project-pager { grid-template-rows: minmax(0, 1fr) 32px auto; }
   .project-preview-link { --preview-height: min(19dvh, 146px); }
-  .project-links { font-size: 12px; gap: 4px 12px; }
+  .project-links { margin-top: 0; font-size: 13px; gap: 0 16px; }
+  .project-links a { display: inline-flex; align-items: center; min-height: 44px; }
+  .project-pagination button { width: 44px; height: 44px; }
   .socials { gap: 0; }
   .socials a { width: 44px; height: 44px; }
 }
