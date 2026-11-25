@@ -70,6 +70,7 @@ function About() {
 export default function Home() {
   const [activeIndex, setActiveIndex] = useState(0)
   const dataHeading = useRef(null)
+  const sectionNav = useRef(null)
   const activeSection = sections[activeIndex]
   const previousSection = sections[activeIndex - 1]
   const nextSection = sections[activeIndex + 1]
@@ -86,6 +87,18 @@ export default function Home() {
     return () => window.removeEventListener('hashchange', openLinkedSection)
   }, [])
 
+  useEffect(() => {
+    // A new section starts at the top, even when the previous one was scrolled far down.
+    if (window.scrollY > 0) window.scrollTo({ top: 0 })
+
+    // On phones the sections are a horizontally scrolling tab bar; keep the current tab in view.
+    const navElement = sectionNav.current
+    const currentTab = navElement.querySelector('[aria-current]')
+    if (currentTab && navElement.scrollWidth > navElement.clientWidth) {
+      navElement.scrollTo({ left: currentTab.offsetLeft - (navElement.clientWidth - currentTab.offsetWidth) / 2 })
+    }
+  }, [activeIndex])
+
   return (
     <main className="portfolio-background">
       <header className="site-header">
@@ -95,7 +108,7 @@ export default function Home() {
           ))}
         </nav>
       </header>
-      <nav className="section-nav" aria-label="Portfolio sections">
+      <nav className="section-nav" aria-label="Portfolio sections" ref={sectionNav}>
         <button
           type="button"
           className="section-arrow"
