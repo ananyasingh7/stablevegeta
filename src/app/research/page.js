@@ -22,7 +22,7 @@ export default function ResearchPage() {
             {posts.map((post, i) => (
               <div key={post.slug}>
                 <Link href={`/research/${post.slug}`} className="block py-6 hover:opacity-80 transition-opacity">
-                  <div className="flex items-start justify-between gap-8">
+                  <div className="flex flex-col gap-1 sm:flex-row sm:items-start sm:justify-between sm:gap-8">
                     <h3 className="text-white font-semibold text-lg flex items-center gap-2">
                       {post.title}
                     </h3>
