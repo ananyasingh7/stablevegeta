@@ -12,6 +12,13 @@ const projects = [
     showcase: { label: 'read the findings', path: '/blob/main/docs/results.md' },
   },
   {
+    name: 'swarms',
+    summary: 'a 24/7 swarm of coding agents across claude, codex, grok, opencode, and more. a chief of staff assigns each task to the cheapest capable model and moves work to another harness when quota runs out.',
+    repo: 'https://github.com/ananyasingh7/swarms',
+    preview: { src: '/projects/swarms-dashboard.png', width: 1572, height: 1330, alt: 'swarms dashboard showing a project board with tasks, team, goal, and the chief of staff' },
+    showcase: { label: 'read the guide', path: '/blob/main/README.md' },
+  },
+  {
     name: 'turboquant mlx',
     summary: 'an implementation of qjl, polarquant, and turboquant for compressing language model kv caches on apple silicon.',
     repo: 'https://github.com/ananyasingh7/turboquant-mlx-',
